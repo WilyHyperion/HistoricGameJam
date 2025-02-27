@@ -1,3 +1,4 @@
+using System;
 using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
 using UnityEngine.Video;
@@ -15,8 +16,14 @@ public class Holdable : MonoBehaviour
     public Collider col;
     void Start()
     {
-        col = GetComponent<Collider>();   
+        col = GetComponent<Collider>();
+        ChildStart();
     }
+
+    public virtual void ChildStart()
+    {
+    }
+
     public void UnHold()
     {
         col.enabled = true;
@@ -31,7 +38,7 @@ public class Holdable : MonoBehaviour
     void Update()
     {
         ChildUpdate();
-        if (held && Input.GetMouseButton(0))
+        if (held && Input.GetMouseButtonDown(0))
         {
             this.Use();
         }

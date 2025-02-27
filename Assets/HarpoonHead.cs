@@ -7,11 +7,11 @@ public class HarpoonHead : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
     }
-    private void OnCollisionEnter(Collision other)
+   /* private void OnCollisionEnter(Collision other)
     {
         if (other.collider.GetComponent<Holdable>())
         {
             other.collider.GetComponent<Rigidbody>().AddForce((other.collider.transform.position - PlayerMovement.instance.transform.position));
         }
-    }
+    }*/
 }
