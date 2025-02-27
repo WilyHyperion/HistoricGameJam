@@ -10,6 +10,7 @@ public class BoatArea : MonoBehaviour
         {
 
             Player.GetComponent<PlayerMovement>().OnBoat = true;
+            Player.GetComponent<PlayerMovement>().InWater = false;
         }
         else
         {

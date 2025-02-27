@@ -17,7 +17,7 @@ public abstract class Interactable : MonoBehaviour
         t.transform.position = new Vector3();
             t.fontSize = 5;
     }
-    bool playerInside = false;
+    public bool playerInside = false;
     public abstract void OnInteract();  
     private void OnTriggerEnter(Collider other)
     {
@@ -32,7 +32,6 @@ public abstract class Interactable : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-
             t.color = new Color(0, 0, 0, 1);
             playerInside = false;
         }

@@ -14,9 +14,11 @@ public class Boat : MonoBehaviour
     public static Vector3 Delta = new Vector3();
     void Update()
     {
-        transform.position += this.transform.forward* Time.smoothDeltaTime * Speed;
-        Delta = transform.position - Last;
-        Last = transform.position;
+        {
+            transform.position += this.transform.forward * Time.smoothDeltaTime * Speed;
+            Delta = transform.position - Last;
+            Last = transform.position;
+        }
     }
 
 }

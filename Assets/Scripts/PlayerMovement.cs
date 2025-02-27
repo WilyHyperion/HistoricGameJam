@@ -1,9 +1,11 @@
 
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
+    public Collider waterSurface;
     public GameObject boat;
     public static PlayerMovement instance;
     public bool OnBoat = true;
@@ -29,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        Physics.IgnoreCollision(characterController, waterSurface);
     }
     public float TurnSpeed = 3f;
     public float shakeIntensity = 5;
@@ -118,12 +121,17 @@ public class PlayerMovement : MonoBehaviour
         rotationX = limited ? Mathf.Clamp(rotationX, -lookXLimit, lookXLimit) : rotationX;
         playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
         transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+        if (HeldItem != null)
+        {
+            HeldItem.transform.position = playerCamera.transform.position + (playerCamera.transform.forward * HeldItem.HoldOffset.x) + (playerCamera.transform.right * HeldItem.HoldOffset.y) + (playerCamera.transform.up * HeldItem.HoldOffset.z);
+        }
     }
     public bool InWater = false;
 
     public bool AtWheel { get; set; }
+    public Holdable HeldItem;
 
-     void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Water"))
         {

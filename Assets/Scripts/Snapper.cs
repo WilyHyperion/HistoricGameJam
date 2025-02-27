@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Snapper : Interactable
 {
+    
     public Transform SnapPoint;
 
     public PlayerMovement Player = PlayerMovement.instance;
@@ -9,6 +10,8 @@ public class Snapper : Interactable
     {
         Player.GetComponent<CharacterController>().enabled = false;
         Player.transform.position = SnapPoint.transform.position;
+        
         Player.GetComponent<CharacterController>().enabled = true;
+        playerInside = false;
     }
 }
