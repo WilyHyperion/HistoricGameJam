@@ -7,7 +7,8 @@ public class Throwable : Holdable
     {
         Debug.Log("ran");
         this.UnHold();
-
+        Physics.IgnoreCollision(col, PlayerMovement.instance.characterController);
+        this.transform.position = PlayerMovement.instance.playerCamera.transform.position;
         this.GetComponent<Rigidbody>().AddForce(PlayerMovement.instance.playerCamera.transform.forward * throwStrength, ForceMode.Impulse);
     }
 }

@@ -7,6 +7,7 @@ TagManager:
   - Water
   - Boat
   - BoatArea
+  - Opener
   layers:
   - Default
   - TransparentFX

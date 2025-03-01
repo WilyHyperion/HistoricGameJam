@@ -1,7 +1,5 @@
 using System;
-using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
-using UnityEngine.Video;
 
 public class Holdable : MonoBehaviour
 {
@@ -12,7 +10,6 @@ public class Holdable : MonoBehaviour
     }
     public Vector3 HoldOffset = new Vector3(1, 1);
     public bool OnBoat = false;
-    public float GrabDistance = 25f;
     public Collider col;
     void Start()
     {
@@ -26,6 +23,8 @@ public class Holdable : MonoBehaviour
 
     public void UnHold()
     {
+
+        Debug.Log("removing");
         col.enabled = true;
         this.held = false;
         PlayerMovement.instance.HeldItem = null;
@@ -42,24 +41,7 @@ public class Holdable : MonoBehaviour
         {
             this.Use();
         }
-        if ((PlayerMovement.instance.transform.position - this.transform.position).magnitude < Mathf.Pow(GrabDistance, 2)  &&  Input.GetKeyDown(KeyCode.F)){
-            if (held)
-            {
-                this.transform.position = PlayerMovement.instance.transform.position + PlayerMovement.instance.transform.forward * 1;
-                UnHold();
-
-            }
-            else
-            {
-                if (PlayerMovement.instance.HeldItem != null)
-                {
-                    PlayerMovement.instance.HeldItem.UnHold();
-                }
-                PlayerMovement.instance.HeldItem = this;
-                col.enabled = false;
-            }
-            this.held = !held;
-        }
+        
         if (OnBoat)
         {
             this.transform.position += Boat.Delta;
@@ -70,10 +52,7 @@ public class Holdable : MonoBehaviour
             this.transform.rotation *= Quaternion.AngleAxis(90, transform.up);
         }
     }
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position, GrabDistance);
-    }
+    
     public void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("BoatArea"))

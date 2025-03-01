@@ -9,6 +9,7 @@ public class Rock : MonoBehaviour
             Boat.Instance.HP -= dmg;
             Destroy(gameObject);
             PlayerMovement.TriggerScreenShake(1);
+            Boat.Instance.hitsoud.Play();
         }
     }
 }

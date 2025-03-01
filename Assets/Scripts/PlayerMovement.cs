@@ -1,10 +1,10 @@
 
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
+    public AudioSource audiosource;
     public Collider waterSurface;
     public GameObject boat;
     public static PlayerMovement instance;
@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
     public bool canMove = true;
 
     
-    CharacterController characterController;
+    public CharacterController characterController;
     void Start()
     {
         instance = this;
@@ -54,9 +54,53 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+    public float GrabRange = 10f;
+    private Holdable GetClosestHoldable()
+    {
+        var all = Physics.OverlapSphere(this.transform.position, this.GrabRange, -1, QueryTriggerInteraction.Collide);
+        Debug.Log(all.Length);
+        Holdable closest = null;
+        foreach(Collider g in all)
+        {
+            var hold = g.GetComponent<Holdable>();
+            if (hold != null)
+            {
+                Debug.Log("succsess");
+                if(closest == null)
+                {
+                    closest = hold;
+                }
+                else if((closest.transform.position - transform.position).magnitude > (hold.transform.position - transform.position).magnitude)
+                {
+                    closest = hold;
+                }
+            }
+        }
+        return closest;
+    }
     void Update()
     {
-       
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            if (HeldItem != null)
+            {
+
+                HeldItem.transform.position = PlayerMovement.instance.transform.position + PlayerMovement.instance.transform.forward * 1;
+                HeldItem.UnHold();
+                HeldItem = null;
+            }
+            else
+            {
+                var v = GetClosestHoldable();
+                Debug.Log("v : " + v);
+                HeldItem?.UnHold();
+                if (v != null)
+                {
+                    HeldItem = v;
+                    v.held = true;
+                }
+            }   
+        }
         if (AtWheel)
         {
         }
@@ -115,6 +159,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
     }
+
+   
+
     public void HandleMouseLook(bool limited = true)
     {
         rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
@@ -135,6 +182,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.CompareTag("Water"))
         {
+            audiosource.Play();
             InWater = true;
         }
     }
@@ -154,5 +202,9 @@ public class PlayerMovement : MonoBehaviour
             Debug.LogWarning("ran2");
             instance.shakefor = v;
         }
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(this.transform.position, GrabRange);
     }
 }
